@@ -1,0 +1,48 @@
+services:
+  backend:
+    env_file:
+      - dev_ops/.env
+    networks:
+      - velvet
+    container_name: 'backend-velvet'
+    build:
+      context: .
+    volumes:
+      - tmp:/app/src/tmp/
+    ports:
+      - "8000:8000"
+
+
+
+
+  celery-worker:
+    env_file:
+      - dev_ops/.env
+    networks:
+      - velvet
+    container_name: 'celery-worker-velvet'
+    build:
+      context: .
+    command: [ "celery", "--app=src.tasks.celery_app:celery_inst", "worker", "--loglevel", "INFO" ]
+
+
+
+  celery-beat:
+    env_file:
+      - dev_ops/.env
+    networks:
+      - velvet
+    container_name: 'celery-beat-velvet'
+    build:
+      context: .
+    command: [ "celery", "--app=src.tasks.celery_app:celery_inst", "beat", "--loglevel", "INFO" ]
+
+volumes:
+  images_for_app:
+
+
+networks:
+  booking-network:
+    external: true # позволяет работать сети между стеками docker compose
+
+name: "velvet"

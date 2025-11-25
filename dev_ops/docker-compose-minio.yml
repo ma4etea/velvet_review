@@ -1,0 +1,39 @@
+services:
+  minio-container:
+    image: minio/minio:RELEASE.2024-12-18T13-15-44Z
+    container_name: minio-container
+    command: server /data --console-address ":9001"
+    env_file:
+      - .env
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - s3-data:/data
+    networks:
+      - velvet
+    restart: always
+
+  minio-init-container:
+    image: minio/mc:RELEASE.2024-11-21T17-21-54Z
+    container_name: minio-init-container
+    depends_on:
+      - minio-container
+    env_file:
+      - .env
+    volumes:
+      - ./minio_init.sh:/init.sh
+      - ./minio_policy.json:/minio_policy.json
+    networks:
+      - velvet
+    entrypoint: ["/bin/sh", "/init.sh"]
+    restart: on-failure
+
+volumes:
+  s3-data:
+
+networks:
+  velvet:
+    external: true
+
+name: minio-stack

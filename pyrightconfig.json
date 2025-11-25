@@ -1,0 +1,8 @@
+{
+  "include": ["src", "tests"],
+  "exclude": ["src/logging_config.py", "src/migrations"],
+  "venvPath": ".",
+  "pythonVersion": "3.11.13",
+  "reportMissingImports": true,
+  "typeCheckingMode": "strict"
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Подтверждение регистрации</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333333;
+            font-size: 24px;
+        }
+        p {
+            font-size: 16px;
+            color: #555555;
+        }
+        .code {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff;
+            border-radius: 4px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Спасибо за регистрацию!</h1>
+        <p>Ваш код подтверждения регистрации:</p>
+        <div class="code">{{ code }}</div>
+        <p>Если вы не регистрировались, просто проигнорируйте это письмо.</p>
+    </div>
+</body>
+</html>

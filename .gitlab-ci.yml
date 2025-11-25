@@ -1,0 +1,49 @@
+stages:
+  - build
+  - format
+  - lint
+  - typecheck
+  - migrate
+#  - test
+  - deploy
+
+build-job:
+  stage: build
+  before_script:
+    - cp ${ENV} .env
+    #- cp ${ENV_TEST} .test.env
+  script:
+    - docker build -t backend-velvet:latest .
+
+format-job:
+  stage: lint
+  script:
+    - docker run --rm --network velvet backend-velvet:latest poetry run ruff format --check .
+
+lint-job:
+  stage: lint
+  script:
+    - docker run --rm --network velvet backend-velvet:latest poetry run ruff check .
+
+typecheck-job:
+  stage: typecheck
+  script:
+    - docker run --rm --network velvet backend-velvet:latest poetry run pyright
+
+migrate-job:
+  stage: migrate
+  script:
+    - docker run --rm --network velvet backend-velvet:latest poetry run alembic upgrade head
+
+#test-job:
+#  stage: test
+#  script:
+#    - docker run --rm --network velvet backend-velvet:latest poetry run pytest
+
+
+deploy-job:
+  stage: deploy
+  environment: production
+  script:
+    - docker compose --file docker-compose-ci.yml up -d
+    - docker exec nginx-container nginx -s reload
