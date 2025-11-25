@@ -1,0 +1,41 @@
+services:
+  velvet-backend-container:
+    networks:
+      - velvet
+    container_name: 'velvet-backend-container'
+    image: backend-velvet:latest
+    volumes:
+      - tmp-backend-velvet:/app/src/tmp/
+    ports:
+      - "8000:8000"
+    command: [ "poetry", "run", "python", "-m", "src.main" ]
+    restart: always
+
+
+
+  velvet-celery-worker-container:
+    networks:
+      - velvet
+    container_name: 'velvet-celery-worker-container'
+    image: backend-velvet:latest
+    command: [ "poetry", "run", "celery", "--app=src.tasks.celery_adapter:celery_app", "worker", "--loglevel", "INFO" ]
+    restart: always
+
+
+
+#  celery-beat:
+#    networks:
+#      - velvet
+#    container_name: 'celery-beat-velvet'
+#    image: booking-app-image:latest
+#    command: [ "celery", "--app=src.tasks.celery_app:celery_inst", "beat", "--loglevel", "INFO" ]
+
+volumes:
+  tmp-backend-velvet:
+
+
+networks:
+  velvet:
+    external: true # позволяет работать сети между стеками docker compose
+
+name: "velvet"
